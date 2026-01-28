@@ -1,0 +1,27 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Toilets{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">🚻 Toilets</h2>
+
+<div class="btn-group mb-4">
+  <a href="?gender=MALE" class="btn btn-outline-primary">Men</a>
+  <a href="?gender=FEMALE" class="btn btn-outline-danger">Women</a>
+</div>
+
+{% for toilet in toilets %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5>{{ toilet.name }}</h5>
+      <p class="mb-1">
+        Block {{ toilet.block }} · Floor {{ toilet.floor }}
+      </p>
+      <small class="text-muted">
+        Gender: {{ toilet.gender }}
+      </small>
+    </div>
+  </div>
+{% empty %}
+  <p>No toilets available for selected gender.</p>
+{% endfor %}
+{% endblock %}

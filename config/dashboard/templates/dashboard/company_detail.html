@@ -1,0 +1,87 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}{{ company.name }}{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-3">{{ company.name }}</h2>
+
+<!-- COMPANY PROFILE LINK -->
+{% if company.profile_url %}
+  <p>
+    🔗 Company Profile:
+    <a href="{{ company.profile_url }}" target="_blank">
+      {{ company.profile_url }}
+    </a>
+  </p>
+{% else %}
+  <p class="text-muted">Company profile link not provided</p>
+{% endif %}
+
+<!-- JOB DESCRIPTION (TEXT) -->
+{% if company.jd %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5>📄 Job Description</h5>
+      <p style="white-space: pre-line;">
+        {{ company.jd }}
+      </p>
+    </div>
+  </div>
+{% endif %}
+
+<!-- JOB DESCRIPTION FILE (PDF) -->
+{% if company.jd_file %}
+  <div class="mb-3">
+    📎 JD Document:
+    <a href="{{ company.jd_file.url }}" target="_blank">
+      Download JD
+    </a>
+  </div>
+{% endif %}
+
+<!-- VENUE DETAILS -->
+<div class="card mb-3">
+  <div class="card-body">
+    <h5>🏛 Venue Details</h5>
+    <p class="mb-1">
+      <strong>Venue:</strong>
+      {{ company.venue.name|default:"Not Assigned" }}
+    </p>
+    <p class="mb-1">
+      <strong>Block:</strong> {{ company.block }}
+    </p>
+    <p class="mb-1">
+      <strong>Floor:</strong> {{ company.floor }}
+    </p>
+    <p class="mb-1">
+      <strong>Room:</strong> {{ company.room_number }}
+    </p>
+    {% if company.landmark %}
+      <p class="mb-0">
+        <strong>Landmark:</strong> {{ company.landmark }}
+      </p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- DIRECTIONS -->
+{% if directions %}
+  <div class="card">
+    <div class="card-body">
+      <h5>🧭 How to Reach</h5>
+      <p style="white-space: pre-line;">
+        {{ directions }}
+      </p>
+    </div>
+  </div>
+{% else %}
+  <p class="text-danger">
+    Select your current location to view directions.
+  </p>
+{% endif %}
+
+<a href="{% url 'dashboard:home' %}" class="btn btn-link mt-3">
+  ← Back to Companies
+</a>
+
+{% endblock %}

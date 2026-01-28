@@ -1,0 +1,45 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Companies{% endblock %}
+
+{% block content %}
+
+<h1>Participating Companies</h1>
+
+<!-- Current Location Selector -->
+<form method="post" action="{% url 'set_location' %}" class="location-form">
+  {% csrf_token %}
+  <label><strong>📍 Select your current location:</strong></label>
+  <select name="location_id" onchange="this.form.submit()">
+    <option value="">Select</option>
+    {% for loc in locations %}
+      <option value="{{ loc.id }}"
+        {% if current_location and current_location.id == loc.id %}selected{% endif %}>
+        {{ loc.name }}
+      </option>
+    {% endfor %}
+  </select>
+</form>
+
+<hr>
+
+{% for company in companies %}
+  <div class="card card--clickable">
+
+    <h3>{{ company.name }}</h3>
+
+    <small>
+      📍 {{ company.venue.name|default:"Venue not assigned" }}
+    </small>
+
+    <div style="margin-top:10px;">
+      <a class="btn" href="{% url 'company_detail' company.id %}">
+        🧭 Navigate
+      </a>
+    </div>
+
+  </div>
+{% empty %}
+  <p>No companies available.</p>
+{% endfor %}
+
+{% endblock %}
