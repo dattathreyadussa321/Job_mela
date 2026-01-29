@@ -1,46 +1,19 @@
 # Python
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-*.egg-info/
-dist/
-build/
+*.pyc
+*.pyo
+*.pyd
 
-# Virtual environments
+# Virtual environment
 venv/
-env/
-ENV/
-.venv
+.venv/
 
 # Django
-*.log
-*.pot
-*.pyc
 db.sqlite3
-db.sqlite3-journal
-/media
-/staticfiles
-.env
-.env.local
+staticfiles/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Environment variables
+.env
 
 # OS
 .DS_Store
-Thumbs.db
-*.bak
-
-# Test scripts (optional - remove if you want to commit them)
-check_toilets.py
-debug_toilets.py
-db_test.py
-monitor_db.py
-test_view.py
-verify_toilets.py
