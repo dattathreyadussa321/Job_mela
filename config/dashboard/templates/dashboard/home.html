@@ -1,0 +1,159 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}Companies - Job Mela{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div style="margin-bottom: 2rem;">
+  <h1 class="text-gradient"> Participating Companies</h1>
+  <p style="color: var(--text-secondary); font-size: 1.1rem;">Find your dream company and navigate to their booth</p>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="search-container">
+  <span class="search-icon"></span>
+  <input type="text" id="company-search" class="search-bar" placeholder="Search companies by name..."
+    autocomplete="off">
+</div>
+
+<!-- FILTER SECTION -->
+<div class="filter-section">
+  <h3 style="margin-bottom: 1rem;"> Filter by Venue</h3>
+  <div class="filter-chips" id="venue-filters">
+    <div class="filter-chip active" data-venue="all">All Companies</div>
+    {% for location in locations %}
+    {% if location.location_type == 'VENUE' %}
+    <div class="filter-chip" data-venue="{{ location.id }}">{{ location.name }}</div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<!-- COMPANY CARDS -->
+<div id="companies-container">
+  {% for company in companies %}
+  <div class="card company-card" data-company-name="{{ company.name|lower }}"
+    data-venue-id="{{ company.venue.id|default:'none' }}">
+    <div class="card-body">
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+        <div style="flex: 1;">
+          <h3 style="margin-bottom: 0.5rem; font-size: 1.5rem;">{{ company.name }}</h3>
+          <div
+            style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+            <span></span>
+            <span style="font-weight: 600;">{{ company.venue.name|default:"Venue TBA" }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; margin-bottom: 1rem; font-size: 0.9rem;">
+        <div style="background: var(--bg-secondary); padding: 0.5rem; border-radius: var(--radius-sm);">
+          <div style="color: var(--text-muted); font-size: 0.8rem;">Block</div>
+          <div style="font-weight: 700; color: var(--color-primary);">{{ company.block }}</div>
+        </div>
+        <div style="background: var(--bg-secondary); padding: 0.5rem; border-radius: var(--radius-sm);">
+          <div style="color: var(--text-muted); font-size: 0.8rem;">Floor</div>
+          <div style="font-weight: 700; color: var(--color-primary);">{{ company.floor }}</div>
+        </div>
+        <div style="background: var(--bg-secondary); padding: 0.5rem; border-radius: var(--radius-sm);">
+          <div style="color: var(--text-muted); font-size: 0.8rem;">Room</div>
+          <div style="font-weight: 700; color: var(--color-primary);">{{ company.room_number }}</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a class="btn btn-primary" href="{% url 'dashboard:company_detail' company.id %}"
+          style="flex: 1; min-width: 150px;">
+          <span>­</span>
+          <span>Navigate</span>
+        </a>
+        {% if company.profile_url %}
+        <a class="btn btn-outline" href="{{ company.profile_url }}" target="_blank" style="flex: 1; min-width: 150px;">
+          <span></span>
+          <span>Company Info</span>
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="empty-state">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">ðŸ¢</div>
+    <h3>No Companies Yet</h3>
+    <p>Companies will appear here once they're registered for the job mela.</p>
+  </div>
+  {% endfor %}
+</div>
+
+<style>
+  /* Additional component-specific styles */
+  .company-card {
+    animation: fadeIn 0.4s ease-out;
+    animation-fill-mode: both;
+  }
+
+  .company-card:nth-child(1) {
+    animation-delay: 0.05s;
+  }
+
+  .company-card:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+
+  .company-card:nth-child(3) {
+    animation-delay: 0.15s;
+  }
+
+  .company-card:nth-child(4) {
+    animation-delay: 0.2s;
+  }
+
+  .company-card:nth-child(5) {
+    animation-delay: 0.25s;
+  }
+</style>
+
+<script>
+  // Search functionality
+  document.getElementById('company-search').addEventListener('input', function (e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const companies = document.querySelectorAll('.company-card');
+
+    companies.forEach(company => {
+      const companyName = company.dataset.companyName;
+      if (companyName.includes(searchTerm)) {
+        company.style.display = 'block';
+      } else {
+        company.style.display = 'none';
+      }
+    });
+  });
+
+  // Filter functionality
+  const filterChips = document.querySelectorAll('.filter-chip');
+  filterChips.forEach(chip => {
+    chip.addEventListener('click', function () {
+      // Remove active class from all chips
+      filterChips.forEach(c => c.classList.remove('active'));
+
+      // Add active class to clicked chip
+      this.classList.add('active');
+
+      const venueId = this.dataset.venue;
+      const companies = document.querySelectorAll('.company-card');
+
+      companies.forEach(company => {
+        const companyVenueId = company.dataset.venueId;
+
+        if (venueId === 'all' || companyVenueId === venueId) {
+          company.style.display = 'block';
+        } else {
+          company.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}

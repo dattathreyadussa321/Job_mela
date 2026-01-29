@@ -1,0 +1,92 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Restrooms - Job Mela{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div style="margin-bottom: 2rem;">
+  <h1 class="text-gradient">🚻 Restrooms</h1>
+  <p style="color: var(--text-secondary); font-size: 1.1rem;">Find the nearest restrooms on campus</p>
+</div>
+
+<!-- GENDER FILTER -->
+<div style="margin-bottom: 2rem;">
+  <div class="filter-chips" style="justify-content: flex-start;">
+    <a href="{% url 'dashboard:toilets' %}" class="filter-chip {% if not request.GET.gender %}active{% endif %}">
+      All Restrooms
+    </a>
+    <a href="{% url 'dashboard:toilets' %}?gender=MALE"
+      class="filter-chip {% if request.GET.gender == 'MALE' %}active{% endif %}">
+      🚹 Men
+    </a>
+    <a href="{% url 'dashboard:toilets' %}?gender=FEMALE"
+      class="filter-chip {% if request.GET.gender == 'FEMALE' %}active{% endif %}">
+      🚺 Women
+    </a>
+  </div>
+</div>
+
+<!-- TOILETS LIST -->
+<div style="display: grid; gap: 1.5rem;">
+  {% for toilet in toilets %}
+  <div class="card facility-card"
+    style="{% if toilet.gender == 'MALE' %}border-left-color: #2563eb;{% else %}border-left-color: #dc2626;{% endif %}">
+    <div class="card-body">
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+        <div style="flex: 1;">
+          <h3 style="margin-bottom: 0.5rem; font-size: 1.5rem;">
+            {% if toilet.gender == 'MALE' %}🚹{% elif toilet.gender == 'FEMALE' %}🚺{% else %}🚻{% endif %}
+            {{ toilet.name }}
+          </h3>
+          <div
+            style="display: inline-block; padding: 0.25rem 0.75rem; background: {% if toilet.gender == 'MALE' %}linear-gradient(135deg, rgba(37, 99, 235, 0.2) 0%, rgba(37, 99, 235, 0.1) 100%){% else %}linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(220, 38, 38, 0.1) 100%){% endif %}; border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; color: {% if toilet.gender == 'MALE' %}var(--color-primary){% else %}var(--color-secondary){% endif %};">
+            {{ toilet.get_gender_display }}
+          </div>
+        </div>
+      </div>
+
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; margin-top: 1rem;">
+        <div
+          style="background: var(--bg-secondary); padding: 0.75rem; border-radius: var(--radius-sm); border-left: 3px solid {% if toilet.gender == 'MALE' %}var(--color-primary){% else %}var(--color-secondary){% endif %};">
+          <div style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.25rem;">Block</div>
+          <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">{{ toilet.block }}</div>
+        </div>
+
+        <div
+          style="background: var(--bg-secondary); padding: 0.75rem; border-radius: var(--radius-sm); border-left: 3px solid {% if toilet.gender == 'MALE' %}var(--color-primary){% else %}var(--color-secondary){% endif %};">
+          <div style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.25rem;">Floor</div>
+          <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">{{ toilet.floor }}</div>
+        </div>
+      </div>
+
+      <!-- Quick Direction Indicator -->
+      <div
+        style="margin-top: 1rem; padding: 0.75rem; background: var(--gradient-card); border-radius: var(--radius-md); display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.25rem;">📍</span>
+        <span style="font-weight: 600; color: var(--text-primary);">
+          Block {{ toilet.block }}, Floor {{ toilet.floor }}
+        </span>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="empty-state">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">🚻</div>
+    <h3>No Restrooms Found</h3>
+    <p>There are no restrooms matching your filter criteria.</p>
+    <a href="{% url 'dashboard:toilets' %}" class="btn btn-primary" style="margin-top: 1rem;">
+      View All Restrooms
+    </a>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- BACK BUTTON -->
+<div style="margin-top: 2rem; text-align: center;">
+  <a href="{% url 'dashboard:home' %}" class="btn btn-outline">
+    ← Back to Home
+  </a>
+</div>
+
+{% endblock %}

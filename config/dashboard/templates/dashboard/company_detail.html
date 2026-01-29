@@ -1,0 +1,198 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}{{ company.name }} - Job Mela{% endblock %}
+
+{% block content %}
+
+<!-- BACK BUTTON -->
+<div style="margin-bottom: 1.5rem;">
+  <a href="{% url 'dashboard:home' %}" class="btn-outline" style="display: inline-flex; padding: 0.5rem 1rem;">
+    ← Back to Companies
+  </a>
+</div>
+
+<!-- COMPANY HEADER -->
+<div class="card"
+  style="background: var(--gradient-card); border: 2px solid var(--color-primary); margin-bottom: 2rem;">
+  <div class="card-body">
+    <h1 class="text-gradient" style="font-size: 2rem; margin-bottom: 1rem;">{{ company.name }}</h1>
+
+    {% if company.profile_url %}
+    <div style="margin-bottom: 1rem;">
+      <a href="{{ company.profile_url }}" target="_blank" class="btn btn-primary">
+        <span>🔗</span>
+        <span>Visit Company Website</span>
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- VENUE DETAILS -->
+<div class="card facility-card" style="border-left-color: var(--color-primary);">
+  <div class="card-body">
+    <h3 style="margin-bottom: 1.5rem;">
+      <span style="font-size: 1.5rem;">🏛️</span>
+      Venue Details
+    </h3>
+
+    <div
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+      <div
+        style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--color-primary);">
+        <div style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.25rem;">Venue / Hall</div>
+        <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">
+          {{ company.venue.name|default:"Not Assigned" }}
+        </div>
+      </div>
+
+      <div
+        style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--color-secondary);">
+        <div style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.25rem;">Block</div>
+        <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">{{ company.block }}</div>
+      </div>
+
+      <div
+        style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--color-primary);">
+        <div style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.25rem;">Floor</div>
+        <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">{{ company.floor }}</div>
+      </div>
+
+      <div
+        style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--color-secondary);">
+        <div style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.25rem;">Room Number</div>
+        <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">{{ company.room_number }}</div>
+      </div>
+    </div>
+
+    {% if company.landmark %}
+    <div style="background: var(--gradient-card); padding: 1rem; border-radius: var(--radius-md); margin-top: 1rem;">
+      <div style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.25rem;">🎯 Landmark</div>
+      <div style="font-weight: 600; color: var(--text-primary);">{{ company.landmark }}</div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- NAVIGATION DIRECTIONS -->
+{% if current_location %}
+<div class="card"
+  style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%); border: 2px solid var(--color-primary);">
+  <div class="card-body">
+    <h3 style="margin-bottom: 1.5rem;">
+      <span style="font-size: 1.5rem;">🧭</span>
+      How to Reach
+    </h3>
+
+    <div
+      style="background: var(--bg-card); padding: 1.5rem; border-radius: var(--radius-md); border-left: 4px solid var(--color-primary);">
+      <div
+        style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 2px dashed var(--border-color);">
+        <div
+          style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">
+          1</div>
+        <div style="flex: 1;">
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Starting Point</div>
+          <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">📍 {{ current_location.name }}
+          </div>
+        </div>
+      </div>
+
+      <div
+        style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 2px dashed var(--border-color);">
+        <div
+          style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">
+          2</div>
+        <div style="flex: 1;">
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Head to Block</div>
+          <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">🏢 Block {{ company.block }}
+          </div>
+        </div>
+      </div>
+
+      <div
+        style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 2px dashed var(--border-color);">
+        <div
+          style="width: 40px; height: 40px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">
+          3</div>
+        <div style="flex: 1;">
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Go to Floor</div>
+          <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">🪜 Floor {{ company.floor }}
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div
+          style="width: 40px; height: 40px; background: var(--gradient-secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">
+          4</div>
+        <div style="flex: 1;">
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Final Destination</div>
+          <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">🚪 Room {{ company.room_number
+            }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="card" style="background: var(--gradient-card); border: 2px solid var(--color-secondary);">
+  <div class="card-body" style="text-align: center; padding: 2rem;">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">📍</div>
+    <h3 style="color: var(--color-secondary); margin-bottom: 1rem;">Set Your Location First</h3>
+    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+      To get navigation directions, please select your current location from the dropdown above.
+    </p>
+    <a href="#location-selector" class="btn btn-primary">
+      <span>📍</span>
+      <span>Set Location Now</span>
+    </a>
+  </div>
+</div>
+{% endif %}
+
+<!-- JOB DESCRIPTION (TEXT) -->
+{% if company.jd %}
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-body">
+    <h3 style="margin-bottom: 1.5rem;">
+      <span style="font-size: 1.5rem;">📄</span>
+      Job Description
+    </h3>
+    <div
+      style="background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-md); white-space: pre-line; line-height: 1.8; color: var(--text-secondary);">
+      {{ company.jd }}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- JOB DESCRIPTION FILE (PDF) -->
+{% if company.jd_file %}
+<div class="card" style="margin-top: 2rem; background: var(--gradient-card);">
+  <div class="card-body" style="text-align: center;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">📎</div>
+    <h4 style="margin-bottom: 1rem;">Job Description Document</h4>
+    <a href="{{ company.jd_file.url }}" target="_blank" class="btn btn-primary" download>
+      <span>📥</span>
+      <span>Download JD (PDF)</span>
+    </a>
+  </div>
+</div>
+{% endif %}
+
+<!-- ACTIONS -->
+<div
+  style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md);">
+  <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+    <a href="{% url 'dashboard:home' %}" class="btn btn-outline">
+      ← Back to All Companies
+    </a>
+    {% if company.profile_url %}
+    <a href="{{ company.profile_url }}" target="_blank" class="btn btn-secondary">
+      🔗 Company Website
+    </a>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

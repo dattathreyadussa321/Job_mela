@@ -1,0 +1,92 @@
+
+{% extends 'dashboard/base.html' %}
+{% block title %}Campus Facilities - Job Mela{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div style="margin-bottom: 2rem;">
+  <h1 class="text-gradient">🏫 Campus Facilities</h1>
+  <p style="color: var(--text-secondary); font-size: 1.1rem;">Find essential campus amenities</p>
+</div>
+
+<!-- FILTER BUTTONS -->
+<div style="margin-bottom: 2rem;">
+  <div class="filter-chips" style="justify-content: flex-start;">
+    <a href="{% url 'dashboard:facilities' %}" class="filter-chip {% if not request.GET.type %}active{% endif %}">
+      All Facilities
+    </a>
+    <a href="{% url 'dashboard:facilities' %}?type=CANTEEN"
+      class="filter-chip {% if request.GET.type == 'CANTEEN' %}active{% endif %}">
+      🍽️ Canteen
+    </a>
+    <a href="{% url 'dashboard:facilities' %}?type=LIBRARY"
+      class="filter-chip {% if request.GET.type == 'LIBRARY' %}active{% endif %}">
+      📚 Library
+    </a>
+  </div>
+</div>
+
+<!-- FACILITIES LIST -->
+<div style="display: grid; gap: 1.5rem;">
+  {% for facility in facilities %}
+  <div class="card facility-card">
+    <div class="card-body">
+      <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+        <div style="flex: 1;">
+          <h3 style="margin-bottom: 0.5rem; font-size: 1.5rem;">
+            {% if facility.location_type == 'CANTEEN' %}🍽️{% elif facility.location_type == 'LIBRARY' %}📚{% else
+            %}📍{% endif %}
+            {{ facility.name }}
+          </h3>
+          <div
+            style="display: inline-block; padding: 0.25rem 0.75rem; background: var(--gradient-card); border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; color: var(--color-primary);">
+            {{ facility.get_location_type_display }}
+          </div>
+        </div>
+      </div>
+
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; margin-top: 1rem;">
+        <div
+          style="background: var(--bg-secondary); padding: 0.75rem; border-radius: var(--radius-sm); border-left: 3px solid var(--color-primary);">
+          <div style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.25rem;">Block</div>
+          <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">{{ facility.block }}</div>
+        </div>
+
+        <div
+          style="background: var(--bg-secondary); padding: 0.75rem; border-radius: var(--radius-sm); border-left: 3px solid var(--color-secondary);">
+          <div style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.25rem;">Floor</div>
+          <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">{{ facility.floor }}</div>
+        </div>
+
+        {% if facility.room_number %}
+        <div
+          style="background: var(--bg-secondary); padding: 0.75rem; border-radius: var(--radius-sm); border-left: 3px solid var(--color-primary);">
+          <div style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.25rem;">Room</div>
+          <div style="font-weight: 700; font-size: 1.1rem; color: var(--text-primary);">{{ facility.room_number }}</div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="empty-state">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">🏫</div>
+    <h3>No Facilities Found</h3>
+    <p>There are no facilities matching your filter criteria.</p>
+    <a href="{% url 'dashboard:facilities' %}" class="btn btn-primary" style="margin-top: 1rem;">
+      View All Facilities
+    </a>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- BACK BUTTON -->
+<div style="margin-top: 2rem; text-align: center;">
+  <a href="{% url 'dashboard:home' %}" class="btn btn-outline">
+    ← Back to Home
+  </a>
+</div>
+
+{% endblock %}
